@@ -5,7 +5,6 @@ from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoin
 from jwt import ExpiredSignatureError, DecodeError
 from fastapi.middleware.cors import CORSMiddleware
 
-
 from app.routers import todo
 from app.auth import decode_and_validate_token
 
