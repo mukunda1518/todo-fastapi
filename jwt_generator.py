@@ -3,15 +3,14 @@ import uuid
 from app import settings
 from datetime import datetime, timedelta
 
-# user1 f311fc0e-4143-45d4-8649-76f36f43e65a  = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0b2RvIiwic3ViIjoiZjMxMWZjMGUtNDE0My00NWQ0LTg2NDktNzZmMzZmNDNlNjVhIiwiZXhwIjoxNzE0OTkwMzE2LjU0Nzc4MiwiaWF0IjoxNzE0OTAzOTE2LjU0Nzc4Mn0.Q0XQTMcWswdodttaIUwy757d8uMTI7PQ0fn_Xw8iJsc
-# user2  83c8975e-7617-4aaf-8300-c3ffa6648c4f = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0b2RvIiwic3ViIjoiODNjODk3NWUtNzYxNy00YWFmLTgzMDAtYzNmZmE2NjQ4YzRmIiwiZXhwIjoxNzE0OTkwNDM5LjUzNDM4NywiaWF0IjoxNzE0OTA0MDM5LjUzNDM4N30.-ux28M3rllMEoiMwoDQcM4R5UjsNNrxp8EQ3DJza_RE
-
+# user1 - 681a5c91-8e15-4657-b1bf-2e5c07576250 : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0b2RvIiwic3ViIjoiNjgxYTVjOTEtOGUxNS00NjU3LWIxYmYtMmU1YzA3NTc2MjUwIiwiZXhwIjoxNzE4NTQ4OTYwLjkyMTU0MywiaWF0IjoxNzE3MjUyOTYwLjkyMTU0M30.Ek8kb0YsC7ee7YzlePWK7WdNxYdnvzXbWTpWobn3G3s
+# user2 - d6a6f6aa-81af-4a63-8c97-766aca39e011 : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0b2RvIiwic3ViIjoiZDZhNmY2YWEtODFhZi00YTYzLThjOTctNzY2YWNhMzllMDExIiwiZXhwIjoxNzE4NTQ4OTg2Ljg5ODkyMywiaWF0IjoxNzE3MjUyOTg2Ljg5ODkyM30.LNHPrHbwUyydQFclzLUa5hnQV8tihKEWFgmvQG_3NxA
 def genereate_jwt_token():
     now = datetime.now()
     payload = {
         "iss": "todo",
-        "sub": "83c8975e-7617-4aaf-8300-c3ffa6648c4f",
-        "exp": (now + timedelta(days=settings.TOKEN_LIFETIME)).timestamp(),
+        "sub": "d6a6f6aa-81af-4a63-8c97-766aca39e011",
+        "exp": (now + timedelta(days=int(settings.TOKEN_LIFETIME))).timestamp(),
         "iat": now.timestamp(),
     }
     return jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")

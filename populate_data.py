@@ -7,7 +7,7 @@ from datetime import datetime
 users = [User(created=datetime.now(), email="haha@gmail.com"), User(created=datetime.now(), email="exmple@gmail.com")]
 
 
-session_maker = sessionmaker(bind=create_engine("sqlite:///database.db"))
+session_maker = sessionmaker(bind=create_engine("mysql://todo_user:todo_pass@localhost:3306/todo_db"))
 
 with session_maker() as session:
     for user in users:
