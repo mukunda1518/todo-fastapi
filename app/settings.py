@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 SECRET_KEY = os.environ.get("SECRET_KEY", '')
-TOKEN_LIFETIME = os.environ.get("TOKEN_LIFETIME", 15)
+TOKEN_LIFETIME = os.environ.get("TOKEN_LIFETIME", 1500)
 
 
 DB_NAME = os.environ.get("DB_NAME", "")
