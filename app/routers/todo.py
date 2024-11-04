@@ -10,19 +10,20 @@ from sqlalchemy.orm import Session
 from app.schemas import GetTask, CreateTask, ListTasks
 from app.database import get_mysql_db
 from app.models import Task, User
+from app.auth import validate_token
+
 router = APIRouter()
 
-
 @router.get("/todo", response_model=ListTasks)
-def get_tasks(request: Request, db: Session = Depends(get_mysql_db)):
-    user_id = request.state.user_id
+async def get_tasks(request: Request, user=Depends(validate_token), db: Session = Depends(get_mysql_db)):
+    user_id = user.get("sub")
     tasks = [
         task.dict() for task in db.query(User).filter(User.id == user_id).first().tasks
     ]
     return {"tasks": tasks}
 
 @router.post("/todo", response_model=GetTask, status_code=status.HTTP_201_CREATED)
-def create_task(request: Request, payload: CreateTask, db: Session = Depends(get_mysql_db)):
+async def create_task(request: Request, payload: CreateTask, user=Depends(validate_token), db: Session = Depends(get_mysql_db)):
     task = Task(
         created=datetime.datetime.now(),
         updated=datetime.datetime.now(),
@@ -38,7 +39,7 @@ def create_task(request: Request, payload: CreateTask, db: Session = Depends(get
     return task
 
 @router.get("/todo/{task_id}", response_model=GetTask)
-def get_task(request: Request, task_id: uuid.UUID, db: Session = Depends(get_mysql_db)):
+async def get_task(request: Request, task_id: uuid.UUID, user=Depends(validate_token), db: Session = Depends(get_mysql_db)):
     task = db.query(Task).filter(
         Task.id == str(task_id), Task.user_id == request.state.user_id
     ).first()
@@ -47,7 +48,7 @@ def get_task(request: Request, task_id: uuid.UUID, db: Session = Depends(get_mys
     return task.dict()
 
 @router.put("/todo/{task_id}", response_model=GetTask)
-def update_task(request: Request, task_id: uuid.UUID, payload: CreateTask, db: Session = Depends(get_mysql_db)):
+async def update_task(request: Request, task_id: uuid.UUID, payload: CreateTask, user=Depends(validate_token), db: Session = Depends(get_mysql_db)):
     task = db.query(Task).filter(
         Task.id == str(task_id), Task.user_id == request.state.user_id
     ).first()
@@ -64,7 +65,7 @@ def update_task(request: Request, task_id: uuid.UUID, payload: CreateTask, db: S
     return task
 
 @router.delete("/todo/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_task(request: Request, task_id: uuid.UUID,  db: Session = Depends(get_mysql_db)):
+async def delete_task(request: Request, task_id: uuid.UUID,  user=Depends(validate_token), db: Session = Depends(get_mysql_db)):
     task = db.query(Task).filter(
         Task.id == str(task_id), Task.user_id == request.state.user_id
     ).first()

@@ -1,4 +1,5 @@
 import uuid
+import datetime
 
 from sqlalchemy import Column, String, DateTime, Text, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
@@ -13,8 +14,11 @@ class User(Base):
     __tablename__ = "user"
 
     id = Column(String(50), primary_key=True, default=generate_uuid)
-    created = Column(DateTime, nullable=False)
-    email = Column(String(50), nullable=False)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now())
+    email = Column(String(50), unique=True, nullable=False)
+    password = Column(String(150), nullable=False)
+    username = Column(String(50), nullable=False)
+    phone = Column(String(50), nullable=True)
 
     tasks = relationship("Task")
 
@@ -23,6 +27,7 @@ class User(Base):
             "id": self.id,
             "created": self.created,
             "email": self.email,
+            "username": self.username,
             "tasks": self.tasks
         }
 

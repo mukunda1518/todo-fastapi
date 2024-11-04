@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from enum import Enum
 from typing import Optional, List
 from uuid import UUID
@@ -35,3 +35,21 @@ class GetTask(BaseModel):
 
 class ListTasks(BaseModel):
     tasks: List[GetTask] = []
+    
+
+class UserBase(BaseModel):
+    email: EmailStr
+    password: str
+    username: Optional[str] = None
+    phone: Optional[str] = None
+
+class CreateUser(UserBase):
+    pass
+
+class UserLogin(UserBase):
+    pass
+
+class UserSignupResponse(UserBase):
+    id: str
+    created_at: datetime
+    access_token: str
