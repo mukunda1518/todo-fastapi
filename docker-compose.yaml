@@ -1,0 +1,44 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: todo_app:1.0
+    container_name: todo_app
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db  # Set DB_HOST to the name of the MySQL service
+      REDIS_HOST: redis
+    ports:
+      - "8081:8000"
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: mysql:8.0
+    container_name: todo_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD} 
+    ports:
+      - "3307:3306" 
+    volumes:
+      - db_data:/var/lib/mysql
+
+  redis:
+    image: redis:7
+    container_name: todo_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  db_data:  # For MySQL data
+  redis_data:  # For Redis data
+
+    

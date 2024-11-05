@@ -1,10 +1,11 @@
 import uuid
+import datetime
 
 from sqlalchemy import Column, String, DateTime, Text, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+from app.database import Base
 
-Base = declarative_base()
 
 def generate_uuid():
     return str(uuid.uuid4())
@@ -12,9 +13,12 @@ def generate_uuid():
 class User(Base):
     __tablename__ = "user"
 
-    id = Column(String, primary_key=True, default=generate_uuid)
-    created = Column(DateTime, nullable=False)
-    email = Column(String, nullable=False)
+    id = Column(String(50), primary_key=True, default=generate_uuid)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now())
+    email = Column(String(50), unique=True, nullable=False)
+    password = Column(String(150), nullable=False)
+    username = Column(String(50), nullable=False)
+    phone = Column(String(50), nullable=True)
 
     tasks = relationship("Task")
 
@@ -23,20 +27,21 @@ class User(Base):
             "id": self.id,
             "created": self.created,
             "email": self.email,
+            "username": self.username,
             "tasks": self.tasks
         }
 
 class Task(Base):
     __tablename__ = "task"
 
-    id = Column(String, primary_key=True, default=generate_uuid)
+    id = Column(String(50), primary_key=True, default=generate_uuid)
     created = Column(DateTime, nullable=False)
     updated = Column(DateTime, nullable=False)
-    title = Column(String, nullable=False)
+    title = Column(String(300), nullable=False)
     description = Column(Text, nullable=True)
-    priority = Column(String, nullable=False)
-    status = Column(String, nullable=False)
-    user_id = Column(String, ForeignKey("user.id"), nullable=False)
+    priority = Column(String(20), nullable=False)
+    status = Column(String(50), nullable=False)
+    user_id = Column(String(50), ForeignKey("user.id"), nullable=False)
 
     def dict(self):
         return {
