@@ -15,3 +15,6 @@ DB_HOST = os.environ.get("DB_HOST", "localhost")
 DB_PORT = os.environ.get("DB_PORT", "3306")
 MYSQL_URL = f'mysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")
+
+SENTRY_DSN = os.environ.get("SENTRY_DSN", "")
+APP_ENV = os.environ.get("APP_ENV", "")
