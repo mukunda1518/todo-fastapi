@@ -75,4 +75,3 @@ async def logout(request: Request, ):
     redis_client.setex(token, 86400, "blacklisted")
 
     return {"message": "Logout successful"}
-    
