@@ -35,4 +35,4 @@ jobs:
 
       - name: Execute deployment commands
         run: |
-          ./deploy.sh
+          /home/ubuntu/deploy.sh
