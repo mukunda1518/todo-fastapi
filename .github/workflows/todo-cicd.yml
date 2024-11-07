@@ -5,6 +5,7 @@ on:
     types: [closed]
     branches:
       - production
+      - main
 
 jobs:
   deploy:
@@ -16,12 +17,14 @@ jobs:
       - name: Set up SSH private key
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_SERVER }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
         run: |
           # Create the SSH directory
           mkdir -p ~/.ssh
           
           # Save the SSH private key and set permissions
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          echo "$SSH_PRIVATE_KEY_SERVER" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           
           # Create the known hosts file to bypass host key verification
