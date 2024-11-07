@@ -35,4 +35,7 @@ jobs:
 
       - name: Execute deployment commands
         run: |
-          /home/ubuntu/deploy.sh
+          pwd
+          ls -la
+          cd /home/ubuntu
+          ./deploy.sh
