@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: todo_app:1.0
+    image: todo-app:1.0
     container_name: todo_app
     env_file:
       - .env
