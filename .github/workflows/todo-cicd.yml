@@ -5,6 +5,7 @@ on:
     types: [closed]
     branches:
       - production
+      - main
 
 jobs:
   deploy:
@@ -16,6 +17,8 @@ jobs:
       - name: Set up SSH private key
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_SERVER }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
         run: |
           # Create the SSH directory
           mkdir -p ~/.ssh
@@ -30,6 +33,14 @@ jobs:
           # Test SSH connection with host key verification disabled
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP "echo 'SSH connection successful!'"
 
-      - name: Execute deployment commands
+      - name: SSH into server and execute deploy script
+        env:
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
         run: |
-          ./deploy.sh
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP << 'EOF'
+            cd /home/ubuntu || { echo "Directory not found!"; exit 1; }
+            ./deploy.sh || { echo "Deployment script failed!"; exit 1; }
+          EOF
+          
+  
