@@ -1,0 +1,41 @@
+name: TODO CICD Build
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - production
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up SSH private key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_SERVER }}
+        run: |
+          # Create the SSH directory
+          mkdir -p ~/.ssh
+          
+          # Save the SSH private key and set permissions
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Test SSH connection
+        env:
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+        run: |
+          # Test SSH connection to ensure it’s working
+          ssh -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP "echo 'SSH connection successful!'"
+
+      - name: Run deployment script
+        env:
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+        run: |
+          # Run your deployment script on the server
+          ssh -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP 'bash -s' < ./deploy.sh
