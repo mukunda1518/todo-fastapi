@@ -36,6 +36,6 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"message": "Todo Application"}
+    return {"message": "Todo Application Running"}
 
 
