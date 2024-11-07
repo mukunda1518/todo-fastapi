@@ -34,9 +34,13 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP "echo 'SSH connection successful!'"
 
       - name: SSH into server and execute deploy script
+        env:
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP << 'EOF'
-            cd /home/ubuntu
-            ./deploy.sh
+            cd /home/ubuntu || { echo "Directory not found!"; exit 1; }
+            ./deploy.sh || { echo "Deployment script failed!"; exit 1; }
           EOF
+          
   
