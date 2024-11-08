@@ -40,10 +40,12 @@ jobs:
       run: |
         IMAGE_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPOSITORY_NAME}"
         TAG="${GITHUB_SHA}"
+        IMAGE_NAME=todo-app
     
         # Debugging: Print values of IMAGE_URI and TAG
         echo "IMAGE_URI=$IMAGE_URI"
         echo "TAG=$TAG"
+        echo "IMAGE_NAME=$IMAGE_NAME"
 
         # Tag the image for ECR
         docker tag "$IMAGE_NAME:$TAG" "$IMAGE_URI:$TAG"
@@ -56,9 +58,9 @@ jobs:
       run: |
         IMAGE_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPOSITORY_NAME}"
         TAG=${GITHUB_SHA}
+        IMAGE_NAME=todo-app
 
         docker tag "$IMAGE_NAME:$TAG" "$IMAGE_URI:$TAG"
-
 
         # Push the image to ECR
         docker push "$IMAGE_URI:$TAG"
