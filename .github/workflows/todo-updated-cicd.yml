@@ -1,0 +1,51 @@
+name: Disabled for Branches but Manually Triggered
+
+on:
+  push:
+    branches: []  # Disables the workflow from running on push events
+  pull_request:
+    branches: []  # Disables the workflow from running on pull request events
+  workflow_dispatch:  # Allows manual triggering of the workflow
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up SSH private key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_SERVER }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+        run: |
+          # Create the SSH directory
+          mkdir -p ~/.ssh
+
+          # Add SSH config for easier connection
+          echo "Host myserver" >> ~/.ssh/config
+          echo "  HostName ${{ secrets.SERVER_IP }}" >> ~/.ssh/config
+          echo "  User ${{ secrets.SERVER_USER }}" >> ~/.ssh/config
+          echo "  IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
+          echo "  StrictHostKeyChecking no" >> ~/.ssh/config
+          
+          # Set permissions for SSH config file
+          chmod 600 ~/.ssh/config
+
+          # Save the SSH private key and set permissions
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          
+          # Create the known hosts file to bypass host key verification
+          touch ~/.ssh/known_hosts
+          
+          # Test SSH connection with host key verification disabled
+          ssh myserver "echo 'SSH connection successful!'"
+
+      - name: SSH into server and execute deploy script
+        run: |
+          ssh myserver "cd /home/ubuntu && ./deploy.sh"
+          
+  
