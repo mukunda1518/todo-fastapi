@@ -38,7 +38,7 @@ jobs:
         AWS_REGION: ${{ secrets.AWS_REGION }}
         REPOSITORY_NAME: fastapi/todo-app
       run: |
-        IMAGE_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$REPOSITORY_NAME
+        IMAGE_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPOSITORY_NAME}"
         TAG=${GITHUB_SHA}
 
         # Tag the image for ECR
@@ -50,8 +50,11 @@ jobs:
         AWS_REGION: ${{ secrets.AWS_REGION }}
         REPOSITORY_NAME: fastapi/todo-app
       run: |
-        IMAGE_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$REPOSITORY_NAME
+        IMAGE_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPOSITORY_NAME}"
         TAG=${GITHUB_SHA}
+
+        docker tag $IMAGE_NAME:$TAG "$IMAGE_URI:$TAG"
+
 
         # Push the image to ECR
         docker push $IMAGE_URI:$TAG
