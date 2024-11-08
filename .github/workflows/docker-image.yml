@@ -40,6 +40,10 @@ jobs:
       run: |
         IMAGE_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPOSITORY_NAME}"
         TAG="${GITHUB_SHA}"
+    
+        # Debugging: Print values of IMAGE_URI and TAG
+        echo "IMAGE_URI=$IMAGE_URI"
+        echo "TAG=$TAG"
 
         # Tag the image for ECR
         docker tag "$IMAGE_NAME:$TAG" "$IMAGE_URI:$TAG"
