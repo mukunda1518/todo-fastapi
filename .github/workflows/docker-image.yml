@@ -1,11 +1,10 @@
 name: Build and Push Docker Image to Amazon ECR
 
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches:
       - production
-      - main
+      - dev
 jobs:
   build:
     runs-on: ubuntu-latest
