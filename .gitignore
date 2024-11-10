@@ -1,2 +1,4 @@
 .env
 *.pyc
+deploy_docker.sh
+back_up_mysql_to_s3.py
