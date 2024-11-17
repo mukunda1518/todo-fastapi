@@ -12,7 +12,6 @@ try:
 except Exception as e:
     pass
 
-Base = declarative_base()
 
 def get_mysql_db():
     db = SessionLocal()

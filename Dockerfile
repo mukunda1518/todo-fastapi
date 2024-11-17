@@ -8,7 +8,7 @@ ENV PYTHONUNBUFFERED True
 WORKDIR /server
 
 RUN pip install --upgrade pip
-RUN apt-get update && apt-get install -y gcc default-libmysqlclient-dev pkg-config vim && \
+RUN apt-get update && apt-get install -y gcc default-libmysqlclient-dev pkg-config vim  bash && \
     rm -rf /var/lib/apt/lists/*  # Clean up apt cache
 
 
