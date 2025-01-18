@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: todo-app
+  namespace: my-namespace
 spec:
   replicas: 1
   selector:
@@ -9,6 +10,7 @@ spec:
       app: todo-app
   template:
     metadata:
+      namespace: my-namespace
       labels:
         app: todo-app
     spec:
@@ -65,6 +67,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: my-namespace
   name: todo-app-service
 spec:
   selector:
@@ -74,4 +77,4 @@ spec:
   - protocol: TCP
     port: 8000
     targetPort: 8000
-    nodePort: 30000
+    nodePort: 30001
